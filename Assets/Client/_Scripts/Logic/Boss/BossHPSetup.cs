@@ -3,25 +3,31 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class BossHPDisplay : MonoBehaviour
+public class BossHPSetup : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
     [SerializeField] private Slider _slider;
-    private IBossHpController _hpController;
+    private IBossHpHandler _hpHandler;
     private IStaticDataService _staticData;
 
     [Inject]
-    public void Construct(IBossHpController bossHpController, IStaticDataService staticData)
+    public void Construct(IBossHpHandler bossHpHandler, IStaticDataService staticData)
     {
-        _hpController = bossHpController;
+        _hpHandler = bossHpHandler;
         _staticData = staticData;
     }
     public void Start()
     {
-        var difficulty = _staticData.ForDifficulty(1);
+        var difficulty = _staticData.CurrentDifficulty;
+        SetVisuals(difficulty);
+
+        _hpHandler.SetVisuals(_text, _slider);
+    }
+
+    private void SetVisuals(DifficultyStaticData difficulty)
+    {
         _text.text = difficulty.bossHp.ToString();
         _slider.maxValue = difficulty.bossHp;
         _slider.value = _slider.maxValue;
-        _hpController.SetText(_text, _slider);
     }
 }

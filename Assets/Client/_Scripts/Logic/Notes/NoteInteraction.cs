@@ -5,11 +5,11 @@ using Zenject;
 
 public class NoteInteraction : MonoBehaviour
 {
-    private IBossHpController _hpController;
+    private IBossHpHandler _hpController;
     private IStaticDataService _staticData;
 
     [Inject]
-    public void Construct(IBossHpController bossHpController, IStaticDataService staticData)
+    public void Construct(IBossHpHandler bossHpController, IStaticDataService staticData)
     {
         _hpController = bossHpController;
         _staticData = staticData;
@@ -20,7 +20,7 @@ public class NoteInteraction : MonoBehaviour
         
         Debug.Log(gameObject.name);
         Destroy(gameObject);
-        _hpController.ChangeHealth(_staticData.ForDifficulty(1).noteDamage);
+        _hpController.ChangeHealth(_staticData.CurrentDifficulty.noteDamage);
     }
 }
  

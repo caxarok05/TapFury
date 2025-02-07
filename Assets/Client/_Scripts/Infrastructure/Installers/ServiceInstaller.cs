@@ -18,7 +18,7 @@ public class ServiceInstaller : MonoInstaller
     private void BindStateFactory() => Container.Bind<StateFactory>().AsSingle();
     private void BindGameFactory() => Container.BindInterfacesAndSelfTo<GameFactory>().AsSingle();
     private void BindUIFactory() => Container.BindInterfacesAndSelfTo<UIFactory>().AsSingle();
-    private void BindBossHpController() => Container.BindInterfacesAndSelfTo<BossHpController>().AsSingle();
+    private void BindBossHpController() => Container.BindInterfacesAndSelfTo<BossHpHandler>().AsSingle();
     private void BindAssetProvider() => Container.BindInterfacesAndSelfTo<AssetProvider>().AsSingle();
     private void BindStaticData() => Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
 

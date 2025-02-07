@@ -1,4 +1,6 @@
 ﻿public interface IStaticDataService
 {
-    DifficultyStaticData ForDifficulty(int difficultyLevel);
+    DifficultyStaticData CurrentDifficulty { get; }
+
+    void SetDifficulty(int difficultyLevel);
 }

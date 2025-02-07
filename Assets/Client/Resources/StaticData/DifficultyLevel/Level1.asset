@@ -20,6 +20,6 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   noteDamage: 30
-  noteSpawnSpeed: 1000
+  noteSpawnInterval: 1000
   noteLifetime: 0.62
   spawnAcceleration: 0.026

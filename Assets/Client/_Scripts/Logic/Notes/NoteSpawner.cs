@@ -9,48 +9,55 @@ using Zenject;
 public class NoteSpawner : MonoBehaviour
 {
     public GameObject prefab;
-    public Vector3 lastNotePos;
     public RectTransform rectTransform;
-    public int count;
 
-    public int spawnInterval = 1;
+    private Vector3 _lastNotePos;
+    private bool _canSpawn = true;
+
 
     private IGameFactory _gameFactory;
     private IStaticDataService _staticDataService;
+    private IBossHpHandler _bossHpHandler;
 
     [Inject]
-    public void Construct(IGameFactory gameFactory, IStaticDataService staticDataService)
+    public void Construct(IGameFactory gameFactory, IStaticDataService staticDataService, IBossHpHandler bossHpHandler)
     {
         _gameFactory = gameFactory;
         _staticDataService = staticDataService;
+        _bossHpHandler = bossHpHandler;
         SetUpRectTransform();
     }
 
     private void Start()
     {
-        SpawnNote();
+        SpawnNotes();
+        _bossHpHandler.OnBossDefeated += StopSpawning;
     }
 
-    public async void SpawnNote()
+    public async void SpawnNotes()
     {
         Vector3[] v = DisplayWorldCorners();
         Vector3 spawnPos;
-        var difficulty = _staticDataService.ForDifficulty(1);
-        for (int i = 0; i < 10; i++)
+
+        var difficulty = _staticDataService.CurrentDifficulty;
+
+        while(_canSpawn)
         {
             spawnPos = new Vector3(Random.Range(v[0].x, v[1].x), Random.Range(v[0].y, v[1].y));
 
-            while (lastNotePos != null && Vector3.Distance(spawnPos, lastNotePos) < prefab.GetComponent<SpriteRenderer>().bounds.size.x)
+            while (_lastNotePos != null && Vector3.Distance(spawnPos, _lastNotePos) < prefab.GetComponent<SpriteRenderer>().bounds.size.x)
             {
                 spawnPos = new Vector3(Random.Range(v[0].x, v[1].x), Random.Range(v[0].y, v[1].y));
             }
-            lastNotePos = spawnPos;
-            Debug.Log(lastNotePos);
-            GameObject noteObject = await _gameFactory.CreateNote(AssetAdress.NotePath, lastNotePos);
-            await Task.Delay((int)difficulty.noteSpawnSpeed);
+            _lastNotePos = spawnPos;
+            Debug.Log(_lastNotePos);
+            GameObject noteObject = await _gameFactory.CreateNote(AssetAdress.NotePath, _lastNotePos);
+            await Task.Delay((int)difficulty.noteSpawnInterval);
         }
 
     }
+
+    private void StopSpawning() => _canSpawn = false;
 
     private Vector3[] DisplayWorldCorners()
     {
@@ -75,4 +82,3 @@ public class NoteType
 {
     public GameObject prefab;
 }
-
