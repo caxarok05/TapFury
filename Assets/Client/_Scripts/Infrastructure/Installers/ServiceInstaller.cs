@@ -13,6 +13,7 @@ public class ServiceInstaller : MonoInstaller
         BindAssetProvider();
         BindUIFactory();
         BindStaticData();
+        BindWindowServise();
     }
 
     private void BindStateFactory() => Container.Bind<StateFactory>().AsSingle();
@@ -21,5 +22,6 @@ public class ServiceInstaller : MonoInstaller
     private void BindBossHpController() => Container.BindInterfacesAndSelfTo<BossHpHandler>().AsSingle();
     private void BindAssetProvider() => Container.BindInterfacesAndSelfTo<AssetProvider>().AsSingle();
     private void BindStaticData() => Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
+    private void BindWindowServise() => Container.BindInterfacesAndSelfTo<WindowService>().AsSingle();
 
 }

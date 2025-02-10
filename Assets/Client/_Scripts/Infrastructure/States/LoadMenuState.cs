@@ -17,7 +17,6 @@ namespace Scripts.Infrastructure.States
         public void Enter()
         {
             onLoaded();
-            Debug.Log("succesLoadMenu");
         }
 
         public void Exit()
